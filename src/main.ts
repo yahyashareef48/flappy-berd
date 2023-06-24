@@ -3,6 +3,8 @@ import WebGL from "three/addons/capabilities/WebGL.js";
 import jump from "./utils/jump";
 import boxMovement from "./utils/boxMovement";
 
+let startGame = false; // Flag to determine if the game has started or not
+
 // Create a new scene
 const scene = new THREE.Scene();
 
@@ -28,6 +30,7 @@ scene.add(box); // Add the box to the scene
 // Listen for key presses
 addEventListener("keydown", (e) => {
   if (e.code === "Space") {
+    startGame = true; // Start the game
     jump(box); // Call the jump function when the Space key is pressed
   }
   console.log(e.code); // Log the key code to the console
@@ -36,7 +39,9 @@ addEventListener("keydown", (e) => {
 // Animation function
 function animate() {
   requestAnimationFrame(animate); // Request the next animation frame
-  boxMovement(box); // Update the position of the box
+  if (startGame) {
+    boxMovement(box); // Update the position of the box only if the game has started
+  }
   renderer.render(scene, camera); // Render the scene with the camera
 }
 
