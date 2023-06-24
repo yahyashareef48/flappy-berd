@@ -21,15 +21,13 @@ renderer.setSize(innerWidth, innerHeight); // Set the size of the renderer to ma
 document.body.appendChild(renderer.domElement); // Add the renderer's output to the webpage
 
 // Load the texture image
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(creeper);
-
-// Create a material with the texture
-const creeperMaterial = new THREE.MeshBasicMaterial({ map: texture });
+const creeperTexture = new THREE.TextureLoader().load(creeper);
 
 // Create a box and apply the photo material
-const boxGeometry = new THREE.PlaneGeometry(1, 1);
-const box = new THREE.Mesh(boxGeometry, creeperMaterial);
+const box = new THREE.Mesh(
+  new THREE.PlaneGeometry(1, 1),
+  new THREE.MeshBasicMaterial({ map: creeperTexture })
+);
 box.position.x = -12; // Set the initial position of the box
 scene.add(box); // Add the box to the scene
 
