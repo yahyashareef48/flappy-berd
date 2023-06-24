@@ -1,16 +1,17 @@
 import * as THREE from "three";
+import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
 import WebGL from "three/addons/capabilities/WebGL.js";
 import jump from "./utils/jump";
 import boxMovement from "./utils/boxMovement";
+import { paragraph } from "./utils/paragraph";
 
 let startGame = false; // Flag to determine if the game has started or not
 
-// Create a new scene
-const scene = new THREE.Scene();
+const scene = new THREE.Scene(); // Create a new scene
 
 // Create a camera to view the scene
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
-camera.lookAt(0, 0, 0); // Make the camera look towards the center of the scene
+camera.lookAt(0, 0, 0); // Set the camera to look towards the center of the scene
 camera.position.z = 10; // Set the camera's position along the z-axis
 
 // Create a renderer to display the scene
@@ -27,6 +28,17 @@ const box = new THREE.Mesh(boxGeometry, blueMaterial);
 box.position.x = -12; // Set the initial position of the box
 scene.add(box); // Add the box to the scene
 
+// Create a renderer for 2D labels
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(innerWidth, innerHeight);
+labelRenderer.domElement.style.position = "absolute";
+labelRenderer.domElement.style.top = "0px";
+document.body.appendChild(labelRenderer.domElement);
+
+// Create a start text object and add it to the scene
+const startText = new CSS2DObject(paragraph("Press Space or Tap on the Screen to Start."));
+!startGame && scene.add(startText);
+
 // Listen for key presses
 addEventListener("keydown", (e) => {
   if (e.code === "Space") {
@@ -41,15 +53,18 @@ function animate() {
   requestAnimationFrame(animate); // Request the next animation frame
 
   if (startGame) {
+    scene.remove(startText); // Remove the start text from the scene when the game starts
     boxMovement(box); // Update the position of the box only if the game has started
   }
 
   // Check if the box's vertical position is below -20 or above 20
   if (box.position.y < -20 || box.position.y > 20) {
-    startGame = false; // If so, the game should be stopped
+    scene.add(startText);
+    startGame = false; // Stop the game if the box goes out of bounds
     box.position.y = 0; // Reset the box's vertical position to 0
   }
 
+  labelRenderer.render(scene, camera);// Render 2D labels in the scene
   renderer.render(scene, camera); // Render the scene with the camera
 }
 
