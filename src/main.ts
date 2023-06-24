@@ -45,7 +45,10 @@ addEventListener("keydown", (e) => {
     startGame = true; // Start the game
     jump(box); // Call the jump function when the Space key is pressed
   }
-  console.log(e.code); // Log the key code to the console
+});
+addEventListener("click", () => {
+    startGame = true; // Start the game
+    jump(box); // Call the jump function when the Space key is pressed
 });
 
 // Animation function
