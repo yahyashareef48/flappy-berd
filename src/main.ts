@@ -39,9 +39,17 @@ addEventListener("keydown", (e) => {
 // Animation function
 function animate() {
   requestAnimationFrame(animate); // Request the next animation frame
+
   if (startGame) {
     boxMovement(box); // Update the position of the box only if the game has started
   }
+
+  // Check if the box's vertical position is below -20 or above 20
+  if (box.position.y < -20 || box.position.y > 20) {
+    startGame = false; // If so, the game should be stopped
+    box.position.y = 0; // Reset the box's vertical position to 0
+  }
+
   renderer.render(scene, camera); // Render the scene with the camera
 }
 
