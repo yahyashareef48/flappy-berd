@@ -4,6 +4,7 @@ import WebGL from "three/addons/capabilities/WebGL.js";
 import jump from "./utils/jump";
 import boxMovement from "./utils/boxMovement";
 import { paragraph } from "./utils/paragraph";
+import creeper from "../public/creeper.jpg";
 
 let startGame = false; // Flag to determine if the game has started or not
 
@@ -19,12 +20,16 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(innerWidth, innerHeight); // Set the size of the renderer to match the window
 document.body.appendChild(renderer.domElement); // Add the renderer's output to the webpage
 
-// Create a blue material for the box
-const blueMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+// Load the texture image
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load(creeper);
 
-// Create a box and position it in the scene
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const box = new THREE.Mesh(boxGeometry, blueMaterial);
+// Create a material with the texture
+const creeperMaterial = new THREE.MeshBasicMaterial({ map: texture });
+
+// Create a box and apply the photo material
+const boxGeometry = new THREE.PlaneGeometry(1, 1);
+const box = new THREE.Mesh(boxGeometry, creeperMaterial);
 box.position.x = -12; // Set the initial position of the box
 scene.add(box); // Add the box to the scene
 
@@ -47,8 +52,8 @@ addEventListener("keydown", (e) => {
   }
 });
 addEventListener("click", () => {
-    startGame = true; // Start the game
-    jump(box); // Call the jump function when the Space key is pressed
+  startGame = true; // Start the game
+  jump(box); // Call the jump function when the Space key is pressed
 });
 
 // Animation function
@@ -67,7 +72,7 @@ function animate() {
     box.position.y = 0; // Reset the box's vertical position to 0
   }
 
-  labelRenderer.render(scene, camera);// Render 2D labels in the scene
+  labelRenderer.render(scene, camera); // Render 2D labels in the scene
   renderer.render(scene, camera); // Render the scene with the camera
 }
 
