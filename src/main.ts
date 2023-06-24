@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import WebGL from "three/addons/capabilities/WebGL.js";
+import jump from "./utils/jump";
 
 const scene = new THREE.Scene();
 
@@ -18,44 +19,26 @@ const box = new THREE.Mesh(boxGeometry, blueMaterial);
 scene.add(box);
 
 addEventListener("keydown", (e) => {
-  const jump = () => {
-    let increment = 0.1;
-    let totalFrames = 100;
-    let currentFrame = 0;
-
-    const animateJump = () => {
-      currentFrame++;
-
-      if (currentFrame <= totalFrames / 2) {
-        box.position.y += increment;
-      } else {
-        box.position.y -= increment;
-      }
-
-      if (currentFrame < totalFrames) {
-        requestAnimationFrame(animateJump);
-      }
-    };
-
-    animateJump();
-  };
-
 
   switch (e.code) {
     case "KeyW":
+    case "ArrowUp":
       box.position.y += 0.2;
       break;
     case "KeyS":
+    case "ArrowDown":
       box.position.y += -0.2;
       break;
     case "KeyD":
+    case "ArrowRight":
       box.position.x += 0.2;
       break;
     case "KeyA":
+    case "ArrowLeft":
       box.position.x += -0.2;
       break;
     case "Space":
-      jump();
+      jump(box);
       break;
   }
   console.log(e.code);
@@ -63,8 +46,7 @@ addEventListener("keydown", (e) => {
 
 function animate() {
   requestAnimationFrame(animate);
-  box.rotation.y += 0.01;
-  box.rotation.x += 0.01;
+  box.position.y -= 0.2;
   renderer.render(scene, camera);
 }
 
