@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import WebGL from "three/addons/capabilities/WebGL.js";
 import jump from "./utils/jump";
+import boxMovement from "./utils/boxMovement";
 
 const scene = new THREE.Scene();
 
@@ -30,12 +31,7 @@ addEventListener("keydown", (e) => {
 
 function animate() {
   requestAnimationFrame(animate);
-  box.position.y -= 0.2;
-
-  if(box.position.y < -20) {
-    box.position.y = 0;
-  }
-  
+  boxMovement(box);
   renderer.render(scene, camera);
 }
 
