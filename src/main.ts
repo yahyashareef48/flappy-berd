@@ -16,6 +16,7 @@ const blueMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const box = new THREE.Mesh(boxGeometry, blueMaterial);
+box.position.x = -10;
 scene.add(box);
 
 addEventListener("keydown", (e) => {
