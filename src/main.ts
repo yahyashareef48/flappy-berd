@@ -16,7 +16,7 @@ const blueMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const box = new THREE.Mesh(boxGeometry, blueMaterial);
-box.position.x = -10;
+box.position.x = -12;
 scene.add(box);
 
 addEventListener("keydown", (e) => {
@@ -31,6 +31,11 @@ addEventListener("keydown", (e) => {
 function animate() {
   requestAnimationFrame(animate);
   box.position.y -= 0.2;
+
+  if(box.position.y < -20) {
+    box.position.y = 0;
+  }
+  
   renderer.render(scene, camera);
 }
 
