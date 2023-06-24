@@ -19,24 +19,7 @@ const box = new THREE.Mesh(boxGeometry, blueMaterial);
 scene.add(box);
 
 addEventListener("keydown", (e) => {
-
   switch (e.code) {
-    case "KeyW":
-    case "ArrowUp":
-      box.position.y += 0.2;
-      break;
-    case "KeyS":
-    case "ArrowDown":
-      box.position.y += -0.2;
-      break;
-    case "KeyD":
-    case "ArrowRight":
-      box.position.x += 0.2;
-      break;
-    case "KeyA":
-    case "ArrowLeft":
-      box.position.x += -0.2;
-      break;
     case "Space":
       jump(box);
       break;
