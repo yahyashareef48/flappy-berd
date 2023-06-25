@@ -2,20 +2,18 @@ import * as THREE from "three";
 
 /**
  * Creates multiple walls in a Three.js scene.
- *
- * @param {THREE.PlaneGeometry} geometry - The geometry of the walls.
- * @param {THREE.MeshBasicMaterial} material - The material applied to the walls.
  * @param {THREE.Scene} scene - The scene to which the walls will be added.
  */
 export default function createWalls(
-  geometry: THREE.PlaneGeometry,
-  material: THREE.MeshBasicMaterial,
   scene: THREE.Scene
 ) {
+  const plainWall = new THREE.PlaneGeometry(1, 10);
+  const greenMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
   // Create 1000 walls
   for (let i = 0; i < 1000; i++) {
-    const wall1 = new THREE.Mesh(geometry, material);
-    const wall2 = new THREE.Mesh(geometry, material);
+    const wall1 = new THREE.Mesh(plainWall, greenMaterial);
+    const wall2 = new THREE.Mesh(plainWall, greenMaterial);
 
     let distance = 3.5;
 

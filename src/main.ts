@@ -21,9 +21,8 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(innerWidth, innerHeight); // Set the size of the renderer to match the window
 document.body.appendChild(renderer.domElement); // Add the renderer's output to the webpage
 
-// Load the texture image. materials
+// Load the texture image.
 const creeperTexture = new THREE.TextureLoader().load(creeper);
-const greenMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
 // Create a box and apply the photo material
 const box = new THREE.Mesh(
@@ -32,8 +31,6 @@ const box = new THREE.Mesh(
 );
 box.position.x = -12; // Set the initial position of the box
 scene.add(box); // Add the box to the scene
-
-const plainWall = new THREE.PlaneGeometry(1, 10);
 
 // Create a renderer for 2D labels
 const labelRenderer = new CSS2DRenderer();
@@ -69,7 +66,7 @@ function animate() {
 
     // Run a specific function only once when the game starts
     if (!hasRunOnce) {
-      createWalls(plainWall, greenMaterial, scene);
+      createWalls(scene);
       hasRunOnce = true;
     }
   }
