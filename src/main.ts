@@ -34,7 +34,6 @@ box.position.x = -12; // Set the initial position of the box
 scene.add(box); // Add the box to the scene
 
 const plainWall = new THREE.PlaneGeometry(1, 10);
-createWalls(plainWall, greenMaterial, scene);
 
 // Create a renderer for 2D labels
 const labelRenderer = new CSS2DRenderer();
@@ -60,12 +59,19 @@ addEventListener("click", () => {
 });
 
 // Animation function
+let hasRunOnce = false;
 function animate() {
   requestAnimationFrame(animate); // Request the next animation frame
 
   if (startGame) {
     scene.remove(startText); // Remove the start text from the scene when the game starts
     boxMovement(box); // Update the position of the box only if the game has started
+
+    // Run a specific function only once when the game starts
+    if (!hasRunOnce) {
+      createWalls(plainWall, greenMaterial, scene);
+      hasRunOnce = true;
+    }
   }
 
   // Check if the box's vertical position is below -20 or above 20
