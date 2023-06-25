@@ -12,33 +12,33 @@ export default function createWalls(
 
   // Create 1000 walls
   for (let i = 0; i < 1000; i++) {
-    const wall1 = new THREE.Mesh(plainWall, greenMaterial);
-    const wall2 = new THREE.Mesh(plainWall, greenMaterial);
+    const topWall = new THREE.Mesh(plainWall, greenMaterial);
+    const bottomWall = new THREE.Mesh(plainWall, greenMaterial);
 
     let distance = 3.5;
 
     // Set the position of the first wall
-    wall1.position.x = 16 + i * distance + i;
-    wall1.position.y = Math.floor(Math.random() * (10 - 7 + 1)) + 7;
+    topWall.position.x = 16 + i * distance + i;
+    topWall.position.y = Math.floor(Math.random() * (10 - 7 + 1)) + 7;
 
     // Set the position of the second wall
-    wall2.position.x = 16 + i * distance + i;
-    wall2.position.y = Math.floor(Math.random() * (-7 - -10 + 1)) + -10;
+    bottomWall.position.x = 16 + i * distance + i;
+    bottomWall.position.y = Math.floor(Math.random() * (-7 - -10 + 1)) + -10;
 
     // Add the walls to the scene
-    scene.add(wall1, wall2);
+    scene.add(topWall, bottomWall);
 
     // Function to animate the walls
     function wallAnimation() {
       const ani = requestAnimationFrame(wallAnimation);
 
       // Move the walls towards the left
-      wall1.position.x -= 0.05;
-      wall2.position.x -= 0.05;
+      topWall.position.x -= 0.05;
+      bottomWall.position.x -= 0.05;
 
       // Remove the walls from the scene when they reach a certain position
-      if (wall1.position.x <= -20 || wall2.position.x <= -20) {
-        scene.remove(wall1, wall2);
+      if (topWall.position.x <= -20 || bottomWall.position.x <= -20) {
+        scene.remove(topWall, bottomWall);
         cancelAnimationFrame(ani);
       }
     }
