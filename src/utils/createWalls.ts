@@ -37,7 +37,7 @@ export default function createWalls(
       bottomWall.position.x -= 0.05;
 
       // Remove the walls from the scene when they reach a certain position
-      if (topWall.position.x <= -20 || bottomWall.position.x <= -20) {
+      if (topWall.position.x <= -50 || bottomWall.position.x <= -50) {
         scene.remove(topWall, bottomWall);
         cancelAnimationFrame(ani);
       }
