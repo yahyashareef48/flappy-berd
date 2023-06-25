@@ -18,11 +18,11 @@ export default function createWalls(
     let distance = 3.5;
 
     // Set the position of the first wall
-    wall1.position.x = i * distance + i;
+    wall1.position.x = 16 + i * distance + i;
     wall1.position.y = Math.floor(Math.random() * (10 - 7 + 1)) + 7;
 
     // Set the position of the second wall
-    wall2.position.x = i * distance + i;
+    wall2.position.x = 16 + i * distance + i;
     wall2.position.y = Math.floor(Math.random() * (-7 - -10 + 1)) + -10;
 
     // Add the walls to the scene
