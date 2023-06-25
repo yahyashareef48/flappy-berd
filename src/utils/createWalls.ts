@@ -5,7 +5,7 @@ import * as THREE from "three";
  * @param {THREE.Scene} scene - The scene to which the walls will be added.
  */
 export default function createWalls(
-  scene: THREE.Scene
+  scene: THREE.Scene,
 ) {
   const plainWall = new THREE.PlaneGeometry(1, 10);
   const greenMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
