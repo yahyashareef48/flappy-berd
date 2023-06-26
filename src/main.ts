@@ -24,13 +24,16 @@ document.body.appendChild(renderer.domElement); // Add the renderer's output to 
 // Load the texture image.
 const creeperTexture = new THREE.TextureLoader().load(creeper);
 
-// Create a box and apply the photo material
-const box = new THREE.Mesh(
-  new THREE.PlaneGeometry(1, 1),
+// Create a player and apply the photo material
+const player = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 0),
   new THREE.MeshBasicMaterial({ map: creeperTexture })
 );
-box.position.x = -12; // Set the initial position of the box
-scene.add(box); // Add the box to the scene
+player.position.x = -12; // Set the initial position of the player
+scene.add(player); // Add the player to the scene
+
+const playerBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+playerBB.setFromObject(player);
 
 // Create a renderer for 2D labels
 const labelRenderer = new CSS2DRenderer();
@@ -47,40 +50,13 @@ const startText = new CSS2DObject(paragraph("Press Space or Tap on the Screen to
 addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     startGame = true; // Start the game
-    jump(box); // Call the jump function when the Space key is pressed
+    jump(player); // Call the jump function when the Space key is pressed
   }
 });
 addEventListener("click", () => {
   startGame = true; // Start the game
-  jump(box); // Call the jump function when the Space key is pressed
+  jump(player); // Call the jump function when the Space key is pressed
 });
-
-// Animation function
-let hasRunOnce = false;
-function animate() {
-  requestAnimationFrame(animate); // Request the next animation frame
-
-  if (startGame) {
-    scene.remove(startText); // Remove the start text from the scene when the game starts
-    boxMovement(box); // Update the position of the box only if the game has started
-
-    // Run a specific function only once when the game starts
-    if (!hasRunOnce) {
-      createWalls(scene);
-      hasRunOnce = true;
-    }
-  }
-
-  // Check if the box's vertical position is below -20 or above 20
-  if (box.position.y < -20 || box.position.y > 20) {
-    scene.add(startText);
-    startGame = false; // Stop the game if the box goes out of bounds
-    box.position.y = 0; // Reset the box's vertical position to 0
-  }
-
-  labelRenderer.render(scene, camera); // Render 2D labels in the scene
-  renderer.render(scene, camera); // Render the scene with the camera
-}
 
 // Check if WebGL is available
 if (WebGL.isWebGLAvailable()) {
@@ -89,4 +65,41 @@ if (WebGL.isWebGLAvailable()) {
   const warning = WebGL.getWebGLErrorMessage();
   const app = document.getElementById("app")!;
   app.appendChild(warning); // Display a warning message if WebGL is not available
+}
+
+// Animation function
+let hasRunOnce = false;
+function animate() {
+  const ani = requestAnimationFrame(animate); // Request the next animation frame
+
+  const PlayBoundingBox = player.geometry.boundingBox;
+  PlayBoundingBox && playerBB.copy(PlayBoundingBox).applyMatrix4(player.matrixWorld);
+
+  if (startGame) {
+    scene.remove(startText); // Remove the start text from the scene when the game starts
+    boxMovement(player); // Update the position of the player only if the game has started
+
+    // Run a specific function only once when the game starts
+    if (!hasRunOnce) {
+      createWalls(scene, playerBB, endGame);
+      hasRunOnce = true;
+    }
+  }
+
+  // Check if the player's vertical position is below -20 or above 20
+  if (player.position.y < -20 || player.position.y > 20) {
+    cancelAnimationFrame(ani);
+    location.reload();
+  }
+
+  labelRenderer.render(scene, camera); // Render 2D labels in the scene
+  renderer.render(scene, camera); // Render the scene with the camera
+
+  function endGame() {
+    cancelAnimationFrame(ani);
+    startGame = false;
+    setTimeout(() => {
+      location.reload()
+    },1000)
+  }
 }
