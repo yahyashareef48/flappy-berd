@@ -9,7 +9,7 @@ export default function createWalls(scene: THREE.Scene, meshBB: THREE.Box3, hand
   const greenMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
   // Create 1000 walls
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 500; i++) {
     const topWall = new THREE.Mesh(plainWall, greenMaterial);
     const bottomWall = new THREE.Mesh(plainWall, greenMaterial);
 
@@ -49,7 +49,8 @@ export default function createWalls(scene: THREE.Scene, meshBB: THREE.Box3, hand
         handleFunction();
         cancelAnimationFrame(ani);
       };
-      topWallBB.intersectsBox(meshBB) || (bottomWallBB.intersectsBox(meshBB) && theEnd());
+      topWallBB.intersectsBox(meshBB) && theEnd();
+      bottomWallBB.intersectsBox(meshBB) && theEnd();
 
       // Remove the walls from the scene when they reach a certain position
       if (topWall.position.x <= -50 || bottomWall.position.x <= -50) {
