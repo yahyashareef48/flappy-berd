@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
 import WebGL from "three/addons/capabilities/WebGL.js";
 import jump from "./utils/jump";
-import boxMovement from "./utils/boxMovement";
 import { paragraph } from "./utils/paragraph";
 import creeper from "../public/creeper.jpg";
 import createWalls from "./utils/createWalls";
@@ -32,6 +31,7 @@ const player = new THREE.Mesh(
 player.position.x = -12; // Set the initial position of the player
 scene.add(player); // Add the player to the scene
 
+// Create bounding boxes for the player
 const playerBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 playerBB.setFromObject(player);
 
@@ -77,7 +77,10 @@ function animate() {
 
   if (startGame) {
     scene.remove(startText); // Remove the start text from the scene when the game starts
-    boxMovement(player); // Update the position of the player only if the game has started
+    // Update the position of the player and camera only if the game has started
+    player.position.y -= 0.2;
+    player.position.x += 0.05;
+    camera.position.x += 0.05;
 
     // Run a specific function only once when the game starts
     if (!hasRunOnce) {
@@ -95,11 +98,12 @@ function animate() {
   labelRenderer.render(scene, camera); // Render 2D labels in the scene
   renderer.render(scene, camera); // Render the scene with the camera
 
+  // Function to end the game and reload the page
   function endGame() {
-    cancelAnimationFrame(ani);
-    startGame = false;
+    cancelAnimationFrame(ani); // Stop the animation frame
+    startGame = false; // Set the game flag to false
     setTimeout(() => {
-      location.reload()
-    }, 500)
+      location.reload(); // Reload the page after a delay of 500 milliseconds
+    }, 500);
   }
 }

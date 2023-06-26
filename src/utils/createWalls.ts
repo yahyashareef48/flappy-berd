@@ -8,7 +8,7 @@ export default function createWalls(scene: THREE.Scene, meshBB: THREE.Box3, hand
   const plainWall = new THREE.BoxGeometry(1, 10, 0);
   const greenMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-  // Create 1000 walls
+  // Create walls
   for (let i = 0; i < 500; i++) {
     const topWall = new THREE.Mesh(plainWall, greenMaterial);
     const bottomWall = new THREE.Mesh(plainWall, greenMaterial);
@@ -26,29 +26,26 @@ export default function createWalls(scene: THREE.Scene, meshBB: THREE.Box3, hand
     // Add the walls to the scene
     scene.add(topWall, bottomWall);
 
+    // Create bounding boxes for the top walls
     const topWallBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
     topWallBB.setFromObject(topWall);
-
+    // Create bounding boxes for the bottom walls
     const bottomWallBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
     bottomWallBB.setFromObject(bottomWall);
 
     // Function to animate the walls
+    //This function is called recursively to animate the walls and check for collisions with the player mesh.
     function wallAnimation() {
       const ani = requestAnimationFrame(wallAnimation);
 
-      // Move the walls towards the left
-      topWall.position.x -= 0.05;
-      bottomWall.position.x -= 0.05;
-
-      const boundingBox1 = topWall.geometry.boundingBox;
-      boundingBox1 && topWallBB.copy(boundingBox1).applyMatrix4(topWall.matrixWorld);
-      const boundingBox2 = bottomWall.geometry.boundingBox;
-      boundingBox2 && bottomWallBB.copy(boundingBox2).applyMatrix4(bottomWall.matrixWorld);
-
+      // Function to handle the end of the game.
+      // This function is called when the player collides with a wall, triggering the end of the game.
       const theEnd = () => {
         handleFunction();
         cancelAnimationFrame(ani);
       };
+
+      // Check for collisions between walls and the player mesh
       topWallBB.intersectsBox(meshBB) && theEnd();
       bottomWallBB.intersectsBox(meshBB) && theEnd();
 
