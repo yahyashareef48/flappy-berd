@@ -5,6 +5,7 @@ import jump from "./utils/jump";
 import { paragraph } from "./utils/paragraph";
 import creeper from "../public/creeper.jpg";
 import createWalls from "./utils/createWalls";
+import playerMovement from "./utils/playerMovement";
 
 let startGame = false; // Flag to determine if the game has started or not
 
@@ -29,6 +30,7 @@ const player = new THREE.Mesh(
   new THREE.MeshBasicMaterial({ map: creeperTexture })
 );
 player.position.x = -12; // Set the initial position of the player
+player.renderOrder = 1
 scene.add(player); // Add the player to the scene
 
 // Create bounding boxes for the player
@@ -45,6 +47,20 @@ document.body.appendChild(labelRenderer.domElement);
 // Create a start text object and add it to the scene
 const startText = new CSS2DObject(paragraph("Press Space or Tap on the Screen to Start."));
 !startGame && scene.add(startText);
+
+let scoreNum = 0;
+// Create a new CSS2DObject and set its initial content to the score number converted to a string
+const scoreDisplay = new CSS2DObject(paragraph(scoreNum.toString()));
+scoreDisplay.position.y = 6;
+scoreDisplay.position.x = 12;
+scene.add(scoreDisplay);
+
+// Function to increase the score
+function increaseScore() {
+  scoreNum += 1;
+  // Update the content of the scoreDisplay object to reflect the new score
+  scoreDisplay.element.textContent = scoreNum.toString();
+}
 
 // Listen for key presses
 addEventListener("keydown", (e) => {
@@ -78,13 +94,11 @@ function animate() {
   if (startGame) {
     scene.remove(startText); // Remove the start text from the scene when the game starts
     // Update the position of the player and camera only if the game has started
-    player.position.y -= 0.2;
-    player.position.x += 0.05;
-    camera.position.x += 0.05;
+    playerMovement(player, [camera, scoreDisplay])
 
-    // Run a specific function only once when the game starts
+    // Run a createWalls function to create walls only once when the game starts
     if (!hasRunOnce) {
-      createWalls(scene, playerBB, endGame);
+      createWalls(scene, playerBB, endGame, increaseScore);
       hasRunOnce = true;
     }
   }
