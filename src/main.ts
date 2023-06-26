@@ -100,6 +100,6 @@ function animate() {
     startGame = false;
     setTimeout(() => {
       location.reload()
-    },1000)
+    }, 500)
   }
 }
