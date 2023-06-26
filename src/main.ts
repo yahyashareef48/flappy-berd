@@ -12,7 +12,13 @@ let startGame = false; // Flag to determine if the game has started or not
 const scene = new THREE.Scene(); // Create a new scene
 
 // Create a camera to view the scene
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+const aspectRatio = window.innerWidth / window.innerHeight;
+// Define a custom aspect ratio for phone screens
+const phoneAspectRatio = 9 / 16; // Example aspect ratio for phones
+// Choose the appropriate aspect ratio based on the device's width and height
+const cameraAspectRatio = aspectRatio > 1 ? aspectRatio : phoneAspectRatio;
+// Create the PerspectiveCamera with the updated aspect ratio
+const camera = new THREE.PerspectiveCamera(75, cameraAspectRatio, 0.1, 1000);
 camera.lookAt(0, 0, 0); // Set the camera to look towards the center of the scene
 camera.position.z = 10; // Set the camera's position along the z-axis
 
@@ -29,7 +35,6 @@ const player = new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 0),
   new THREE.MeshBasicMaterial({ map: creeperTexture })
 );
-player.position.x = -12; // Set the initial position of the player
 player.renderOrder = 1
 scene.add(player); // Add the player to the scene
 
@@ -46,13 +51,15 @@ document.body.appendChild(labelRenderer.domElement);
 
 // Create a start text object and add it to the scene
 const startText = new CSS2DObject(paragraph("Press Space or Tap on the Screen to Start."));
-!startGame && scene.add(startText);
+startText.position.y = -3
+scene.add(startText);
 
 let scoreNum = 0;
 // Create a new CSS2DObject and set its initial content to the score number converted to a string
 const scoreDisplay = new CSS2DObject(paragraph(scoreNum.toString()));
 scoreDisplay.position.y = 6;
-scoreDisplay.position.x = 12;
+// Add styles to scoreDisplay
+scoreDisplay.element.classList.add("score")
 scene.add(scoreDisplay);
 
 // Function to increase the score
